@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="profile">perfil</string>
+    <string name="name_email_required">Los campos nombre y email son obligatorios.</string>
+    <string name="email_in_use">Ese email ya está en uso.</string>
+    <string name="unavailable_information">La información solicitada no está disponible en estos momentos.</string>
+    <string name="sign_up_error">No pudimos registrarle, porfavor intente de nuevo más tarde.</string>
+    <string name="update_error">No pudimos completar esa acción, porfavor intente de nuevo más tarde.</string>
+</resources>
