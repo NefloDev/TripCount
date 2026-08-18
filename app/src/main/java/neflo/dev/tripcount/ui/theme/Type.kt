@@ -10,8 +10,6 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.googlefonts.R
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
-
 @SuppressLint("PrivateResource")
 val provider: GoogleFont.Provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -19,7 +17,7 @@ val provider: GoogleFont.Provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val robotoFontName = GoogleFont("Roboto")
+val robotoFontName = GoogleFont("IBM Plex Sans")
 
 val robotoFontFamily = FontFamily(
     Font(googleFont = robotoFontName, fontProvider = provider)
