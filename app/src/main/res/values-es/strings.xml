@@ -7,4 +7,17 @@
     <string name="unavailable_information">La información solicitada no está disponible en estos momentos.</string>
     <string name="sign_up_error">No pudimos registrarle, porfavor intente de nuevo más tarde.</string>
     <string name="update_error">No pudimos completar esa acción, porfavor intente de nuevo más tarde.</string>
+    <string name="login_screen_title">Bienvenid@ de vuelta!</string>
+    <string name="signup_screen_title">Registrarse</string>
+    <string name="email_field">Correo electrónico</string>
+    <string name="password_field">Contraseña</string>
+    <string name="google_login">Inicia sesión con Google</string>
+    <string name="email_field_placeholder">Introduce tu email</string>
+    <string name="password_field_placeholder">Introduce tu contraseña</string>
+    <string name="user_not_found">No hay ningún usuario con ese correo.</string>
+    <string name="incorrect_password">La contraseña es incorrecta.</string>
+    <string name="email_required">El campo de email no debe estar vacío.</string>
+    <string name="password_required">El campo de contraseña no debe estar vacío.</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="invalid_email">El formato del correo electrónico no es correcto.</string>
 </resources>

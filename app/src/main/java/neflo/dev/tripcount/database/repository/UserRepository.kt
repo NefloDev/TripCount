@@ -8,7 +8,7 @@ import neflo.dev.tripcount.database.model.UserModel
 import neflo.dev.tripcount.database.userTable
 import java.util.UUID
 
-interface UserRepository {
+class UserRepository {
 
     suspend fun insert(userModel: UserModel) {
         DatabaseClient.supabase
@@ -42,14 +42,14 @@ interface UserRepository {
             }
     }
 
-    suspend fun getUserByEmail(email: String): UserModel {
+    suspend fun getUserByEmail(email: String): UserModel? {
         return DatabaseClient.supabase
             .from(userTable)
             .select {
                 filter {
                     eq("EMAIL", email)
                 }
-            }.decodeAs<UserModel>()
+            }.decodeAs<UserModel?>()
     }
 
     suspend fun getGroupMembers(groupId: UUID) : List<GroupMemberModel> {

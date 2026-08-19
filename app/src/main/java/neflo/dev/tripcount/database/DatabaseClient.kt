@@ -5,11 +5,9 @@ import io.github.jan.supabase.postgrest.Postgrest
 
 object DatabaseClient{
 
-    val systemEnv: Map<String, String> = System.getenv()
-
     val supabase = createSupabaseClient(
-        supabaseUrl = systemEnv.getValue("DB_URL"),
-        supabaseKey = systemEnv.getValue("DB_PASSWORD")
+        supabaseUrl = "127.0.0.1",
+        supabaseKey = "123456789"
     ) {
         install(Postgrest)
     }

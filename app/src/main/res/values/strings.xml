@@ -6,4 +6,18 @@
     <string name="unavailable_information">The requested information isn’t available right now.</string>
     <string name="sign_up_error">We couldn\'t sign you up, please try again later.</string>
     <string name="update_error">We couldn\'t complete that action, please try again later.</string>
+    <string name="login_screen_title">Welcome back!</string>
+    <string name="signup_screen_title">Signup</string>
+
+    <string name="password_field">Password</string>
+    <string name="google_login">Login with Google</string>
+    <string name="email_field_placeholder">Enter your email</string>
+    <string name="password_field_placeholder">Enter your password</string>
+    <string name="user_not_found">There is no user with that email.</string>
+    <string name="incorrect_password">The password is incorrect.</string>
+    <string name="email_required">Email field must not be empty.</string>
+    <string name="password_required">Password field must not be empty.</string>
+    <string name="login">Log in</string>
+    <string name="email_field">Email</string>
+    <string name="invalid_email">Email format is not correct.</string>
 </resources>
