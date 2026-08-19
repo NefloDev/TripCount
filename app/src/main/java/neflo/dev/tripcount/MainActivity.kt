@@ -1,6 +1,5 @@
 package neflo.dev.tripcount
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,20 +25,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import neflo.dev.tripcount.database.DatabaseManager
-import neflo.dev.tripcount.model.UserModel
 import neflo.dev.tripcount.ui.theme.TripCountTheme
 
 class MainActivity : ComponentActivity() {
-
-    val db = DatabaseManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,24 +39,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TripCountTheme {
-                val lifecycleOwner = LocalLifecycleOwner.current
-                val resources = LocalResources.current
-
                 Scaffold (
                     modifier = Modifier.fillMaxSize(),
-                    topBar = { CustomTopBar(resources) },
+                    topBar = { CustomTopBar() },
                     floatingActionButton = {
                         FloatingActionButton(
-                            onClick = {
-                                val currentState = lifecycleOwner.lifecycle.currentState
-
-                                if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-                                    db.addUser(
-                                        UserModel("Alejandro", "alneflo27@gmail.com", "Alejo"),
-                                        resources
-                                    )
-                                }
-                            },
+                            onClick = {},
                             modifier = Modifier
                                 .padding(8.dp)
                                 .size(68.dp)
@@ -96,7 +76,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun CustomTopBar(resources: Resources) {
+    fun CustomTopBar() {
         CenterAlignedTopAppBar(
             title = {
                 Text(
@@ -107,7 +87,7 @@ class MainActivity : ComponentActivity() {
             },
             actions = {
                 IconButton(
-                    onClick = {db.getUserByEmail("alneflo27@gmail.com", resources)},
+                    onClick = {},
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(54.dp)

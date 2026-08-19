@@ -47,6 +47,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.firebase.firestore)
+    implementation(platform(libs.bom))
+    implementation(libs.postgrest.kt)
+    implementation(libs.ktor.client.android)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
 
