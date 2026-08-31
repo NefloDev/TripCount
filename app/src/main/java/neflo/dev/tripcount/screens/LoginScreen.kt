@@ -15,6 +15,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,19 +27,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import neflo.dev.tripcount.R
 import neflo.dev.tripcount.Screen
-import neflo.dev.tripcount.database.repository.UserRepository
-import neflo.dev.tripcount.util.EMAIL_KEY
-import neflo.dev.tripcount.util.UID_KEY
-import neflo.dev.tripcount.util.encrypt256
+import neflo.dev.tripcount.api.model.authentication.LoginDTO
+import neflo.dev.tripcount.api.viewModel.AuthenticationViewModel
 
 @Composable
-fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavController) {
-    val userRepository = UserRepository()
+fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavController, authVM: AuthenticationViewModel) {
+    val loginToken by authVM.loginToken.collectAsState()
     val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
@@ -59,10 +58,7 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
         mutableStateOf(false)
     }
 
-    val email = sharedPreferences.getString(EMAIL_KEY, "").toString()
-    val userId = sharedPreferences.getString(UID_KEY, "").toString()
-
-    if (email != "" && userId != "") {
+    if (loginToken != null) {
         navController.navigate(route = Screen.Main.route)
     }
 
@@ -162,20 +158,8 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
                                 }
                             }
 
-                            if (errorMessage.value.isBlank()){
-                                scope.launch {
-                                    val user = userRepository.getUserByEmail(emailValue.value)
-                                    if (user == null) {
-                                        errorMessage.value = resources.getString(R.string.user_not_found)
-                                    } else {
-                                        if (user.password != encrypt256(pwdValue.value)){
-                                            errorMessage.value = resources.getString(R.string.incorrect_password)
-                                            isPasswordError.value = true
-                                        }
-
-                                        saveData(emailValue.value, user.uuid.toString(), sharedPreferences, navController)
-                                    }
-                                }
+                            scope.launch {
+                                authVM.login(LoginDTO(emailValue.value, pwdValue.value))
                             }
                         }
                     ) {
@@ -190,13 +174,4 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
             }
         }
     }
-}
-
-private fun saveData(email: String, userId: String, sharedPreferences: SharedPreferences, navController: NavController){
-    sharedPreferences.edit {
-        putString("email", email)
-        putString("userId", userId)
-    }
-
-    navController.navigate(route = Screen.Main.route)
 }
