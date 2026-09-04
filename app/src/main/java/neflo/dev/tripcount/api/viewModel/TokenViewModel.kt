@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import neflo.dev.tripcount.api.config.TokenManager
+import neflo.dev.tripcount.api.model.authentication.LoginResponse
 
 @HiltViewModel
 class TokenViewModel @Inject constructor(private val tokenManager: TokenManager): ViewModel() {
@@ -37,9 +38,9 @@ class TokenViewModel @Inject constructor(private val tokenManager: TokenManager)
         _password.value = password
     }
 
-    fun saveSession(token: String) {
+    fun saveSession(loginResponse: LoginResponse) {
         viewModelScope.launch(Dispatchers.IO) {
-            tokenManager.saveToken(token)
+            tokenManager.saveToken(loginResponse.token, loginResponse.expiresOn)
             tokenManager.saveSession(email.value, password.value)
         }
     }

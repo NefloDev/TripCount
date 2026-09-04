@@ -2,14 +2,19 @@ package neflo.dev.tripcount.api.config
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class TokenManager(private val context: Context) {
 
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("jwt_token")
+        private val LOGIN_TIMESTAMP = longPreferencesKey("login_timestamp")
+        private val TOKEN_EXPIRATION = longPreferencesKey("token_expiration")
         private val EMAIL_KEY = stringPreferencesKey("user_email")
         private val PASSWORD_KEY = stringPreferencesKey("user_password")
     }
@@ -20,15 +25,31 @@ class TokenManager(private val context: Context) {
         }
     }
 
-    suspend fun saveToken(token: String) {
+    fun getTokenExpiration(): Flow<Long?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[TOKEN_EXPIRATION]
+        }
+    }
+
+    fun getLoginTimestamp(): Flow<Long?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[LOGIN_TIMESTAMP]
+        }
+    }
+
+    suspend fun saveToken(token: String, tokenExpiration: Long) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = token
+            preferences[LOGIN_TIMESTAMP] = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+            preferences[TOKEN_EXPIRATION] = tokenExpiration
         }
     }
 
     suspend fun deleteToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(TOKEN_KEY)
+            preferences[LOGIN_TIMESTAMP] = LocalDateTime.MIN.toEpochSecond(ZoneOffset.UTC)
+            preferences[TOKEN_EXPIRATION] = 0L
         }
     }
 

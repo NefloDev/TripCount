@@ -31,7 +31,7 @@ class AuthAuthenticator @Inject constructor(private val tokenManager: TokenManag
             }
 
             newToken.body()?.let {
-                tokenManager.saveToken(it.token)
+                tokenManager.saveToken(it.token, it.expiresOn)
                 response.request.newBuilder()
                     .header("Authorization", "Bearer ${it.token}")
                     .build()

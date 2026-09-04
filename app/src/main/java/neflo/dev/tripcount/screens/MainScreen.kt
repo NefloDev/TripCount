@@ -18,6 +18,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -74,48 +75,59 @@ fun MainScreen(sharedPreferences: SharedPreferences, navController: NavControlle
         }
     ) { innerPadding ->
 
-        when(val response = userGroupsResponse.value) {
-            null,
-            is ApiResponse.Success -> {
-                if (response == null) {
+        PullToRefreshBox(
+            isRefreshing = userGroupsResponse.value is ApiResponse.Loading,
+            onRefresh = {
+                userViewModel.getUserGroups(object : BaseViewModel.CoroutinesErrorHandler {
+                    override fun onError(message: String) {
+                        isGroupsResponseError.value = true
+                    }
+                })
+            },
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            when(val response = userGroupsResponse.value) {
+                null,
+                is ApiResponse.Success -> {
+                    if (response == null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Error loading groups")
+                        }
+                    } else{
+                        LazyColumn (modifier = Modifier
+                            .fillMaxSize()) {
+                            items(response.data) { group ->
+                                CustomGroupCard(group.name, group.pfp)
+                            }
+                        }
+                    }
+                }
+                is ApiResponse.Failure -> {
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
+                            .fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text("Error loading groups")
                     }
-                } else{
-                    LazyColumn (modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()) {
-                        items(response.data) { group ->
-                            CustomGroupCard(group.name, group.pfp)
-                        }
+                }
+                is ApiResponse.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(150.dp),
+                            strokeWidth = 10.dp
+                        )
                     }
-                }
-            }
-            is ApiResponse.Failure -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Error loading groups")
-                }
-            }
-            is ApiResponse.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(150.dp),
-                        strokeWidth = 10.dp
-                    )
                 }
             }
         }

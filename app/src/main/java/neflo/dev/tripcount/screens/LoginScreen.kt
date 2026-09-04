@@ -84,7 +84,7 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
                 errorMessage.value = resources.getString(R.string.login_error)
             }
             is ApiResponse.Success -> {
-                tokenViewModel.saveSession((loginResponse.value as ApiResponse.Success<LoginResponse>).data.token)
+                tokenViewModel.saveSession((loginResponse.value as ApiResponse.Success<LoginResponse>).data)
             }
             else -> {}
         }
