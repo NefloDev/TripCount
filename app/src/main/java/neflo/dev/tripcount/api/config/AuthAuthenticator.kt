@@ -2,6 +2,7 @@ package neflo.dev.tripcount.api.config
 
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import neflo.dev.tripcount.api.model.authentication.LoginDTO
 import neflo.dev.tripcount.api.model.authentication.LoginResponse
 import neflo.dev.tripcount.api.service.AuthService
 import neflo.dev.tripcount.util.BASE_URL
@@ -50,7 +51,7 @@ class AuthAuthenticator @Inject constructor(private val tokenManager: TokenManag
             .build()
 
         val service = retrofit.create(AuthService::class.java)
-        return service.refresh("Bearer $refreshToken")
+        return service.login(LoginDTO(tokenManager.getEmail().first() ?: "", tokenManager.getPassword().first() ?: ""))
     }
 
 }

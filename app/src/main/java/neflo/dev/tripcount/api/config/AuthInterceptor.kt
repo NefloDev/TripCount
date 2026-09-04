@@ -13,9 +13,15 @@ class AuthInterceptor @Inject constructor(private val tokenManager: TokenManager
             tokenManager.getToken().first()
         }
 
-        val request = chain.request().newBuilder()
-        request.addHeader("Authorization", "Bearer $token")
-        return chain.proceed(request.build())
+        val request = chain.request()
+        if (request.header("Skip-Auth") == "true") {
+            return chain.proceed(request)
+        }
+
+        return chain.proceed(request
+            .newBuilder()
+            .addHeader("Authorization", "Bearer $token")
+            .build())
     }
 
 }

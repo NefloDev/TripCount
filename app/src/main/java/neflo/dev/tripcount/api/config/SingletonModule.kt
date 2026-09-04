@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import neflo.dev.tripcount.TripCountApplication
 import neflo.dev.tripcount.api.service.AuthService
+import neflo.dev.tripcount.api.service.UserService
 import neflo.dev.tripcount.util.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -57,14 +58,21 @@ class SingletonModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitBuilder(): Retrofit.Builder = Retrofit.Builder()
+    fun provideRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
 
     @Singleton
     @Provides
-    fun provideApiAuthenticationService(retrofit: Retrofit.Builder): AuthService  = retrofit
+    fun provideAuthService(retrofit: Retrofit.Builder): AuthService  = retrofit
         .build()
         .create(AuthService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideUserService(retrofit: Retrofit.Builder): UserService  = retrofit
+        .build()
+        .create(UserService::class.java)
 
 }

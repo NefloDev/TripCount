@@ -84,7 +84,7 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
                 errorMessage.value = resources.getString(R.string.login_error)
             }
             is ApiResponse.Success -> {
-                tokenViewModel.saveToken((loginResponse.value as ApiResponse.Success<LoginResponse>).data.token)
+                tokenViewModel.saveSession((loginResponse.value as ApiResponse.Success<LoginResponse>).data.token)
             }
             else -> {}
         }
@@ -190,6 +190,7 @@ fun LoginScreen(sharedPreferences: SharedPreferences, navController: NavControll
                             }
 
                             scope.launch {
+                                tokenViewModel.saveLogin(emailValue.value, pwdValue.value)
                                 authVM.login(
                                     LoginDTO(emailValue.value, pwdValue.value),
                                     object : BaseViewModel.CoroutinesErrorHandler {

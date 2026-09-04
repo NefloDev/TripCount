@@ -17,15 +17,16 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     private val _loginResponse = MutableStateFlow<ApiResponse<LoginResponse>?>(null)
     val loginResponse: StateFlow<ApiResponse<LoginResponse>?> = _loginResponse
 
-    fun login(loginDTO: LoginDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = baseRequest(_loginResponse, coroutinesErrorHandler) {
+
+    fun login(loginDTO: LoginDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = responseRequest(_loginResponse, coroutinesErrorHandler) {
         authRepository.login(loginDTO)
     }
 
-    fun googleLogin(googleLoginDTO: GoogleLoginDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = baseRequest(_loginResponse, coroutinesErrorHandler) {
+    fun googleLogin(googleLoginDTO: GoogleLoginDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = responseRequest(_loginResponse, coroutinesErrorHandler) {
         authRepository.googleLogin(googleLoginDTO)
     }
 
-    fun signUp(registerDTO: UserDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = baseRequest(_loginResponse, coroutinesErrorHandler) {
+    fun signUp(registerDTO: UserDTO, coroutinesErrorHandler: CoroutinesErrorHandler) = responseRequest(_loginResponse, coroutinesErrorHandler) {
         authRepository.signUp(registerDTO)
     }
 }

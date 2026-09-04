@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 open class BaseViewModel : ViewModel() {
     private var mJob: Job? = null
 
-    protected fun <T> baseRequest(liveData: MutableStateFlow<T>, errorHandler: CoroutinesErrorHandler, request: () -> Flow<T>) {
+    protected fun <T> responseRequest(liveData: MutableStateFlow<T>, errorHandler: CoroutinesErrorHandler, request: () -> Flow<T>) {
         mJob = viewModelScope.launch { Dispatchers.IO + CoroutineExceptionHandler { _, error ->
             viewModelScope.launch(Dispatchers.Main) {
                 errorHandler.onError(error.localizedMessage ?: "An error occurred. Please try again.")
@@ -26,6 +26,24 @@ open class BaseViewModel : ViewModel() {
             }
         }
     }
+
+    protected fun <T> responseRequest(liveData: MutableStateFlow<T>, request: () -> Flow<T>) {
+        mJob = viewModelScope.launch(Dispatchers.IO) {
+            request().collect {
+                withContext(Dispatchers.Main) {
+                    liveData.value = it
+                }
+            }
+        }
+    }
+
+    protected fun <T> performRequest(request: () -> Flow<T>) {
+        mJob = viewModelScope.launch(Dispatchers.IO) {
+            request()
+        }
+    }
+
+
 
     override fun onCleared() {
         mJob?.let {
