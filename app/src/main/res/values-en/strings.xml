@@ -20,4 +20,5 @@
     <string name="password_required">Password field must not be empty.</string>
     <string name="login">Log in</string>
     <string name="invalid_email">Email format is not correct.</string>
+    <string name="login_error">Incorrect email or password.</string>
 </resources>

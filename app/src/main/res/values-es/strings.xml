@@ -20,4 +20,5 @@
     <string name="password_required">El campo de contraseña no debe estar vacío.</string>
     <string name="login">Iniciar sesión</string>
     <string name="invalid_email">El formato del correo electrónico no es correcto.</string>
+    <string name="login_error">El correo o la contraseña son incorrectos.</string>
 </resources>

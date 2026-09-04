@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.ksp)
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -28,11 +30,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
+    }
+
+    packaging {
+        resources {
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
     }
 }
 
@@ -55,6 +63,15 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
 
